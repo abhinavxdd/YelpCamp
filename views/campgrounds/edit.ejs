@@ -30,35 +30,56 @@
                     <label class="form-label" for="image">Add More Images</label>
                     <input class="form-control" type="file" id="image" name="image" multiple>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="price">Campground Price</label>
-                    <div class="input-group">
-                        <span class="input-group-text" id="price-label">$</span>
-                        <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
-                            aria-describedby="price-label" name="campground[price]" value="<%=campground.price %>"
-                            required>\<div class="valid-feedback">
-                            Looks good!
-                        </div>
-                        <div class="invalid-feedback">
-                            Invalid input detected. Fix the errors and try again.
+                <% if(campground.images && campground.images.length> 0) { %>
+                    <div class="mb-3">
+                        <label class="form-label">Current Images</label>
+                        <div class="row">
+                            <% campground.images.forEach((img, i)=> { %>
+                                <div class="col-md-6 mb-3">
+                                    <img src="<%= img.url %>" alt=""
+                                        style="width: 100%; height: 150px; object-fit: cover; cursor: pointer; border: 1px solid #dee2e6; border-radius: 0.375rem;"
+                                        onclick="toggleCheckbox('<%= i %>')">
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" name="deleteImages[]"
+                                            value="<%= img.filename %>" id="image-<%= i %>">
+                                        <label class="form-check-label text-danger" for="image-<%= i %>">
+                                            Delete this image
+                                        </label>
+                                    </div>
+                                </div>
+                                <% }) %>
                         </div>
                     </div>
-                </div>
+                    <% } %>
+                        <div class="mb-3">
+                            <label class="form-label" for="price">Campground Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="price-label">$</span>
+                                <input type="text" class="form-control" id="price" placeholder="0.00" aria-label="price"
+                                    aria-describedby="price-label" name="campground[price]"
+                                    value="<%=campground.price %>" required>\<div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Invalid input detected. Fix the errors and try again.
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="mb-3">
-                    <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description" name="campground[description]"
-                        required><%= campground.description%></textarea>
-                    <div class="valid-feedback">
-                        Looks Good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Invalid input detected. Fix the errors and try again.
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <button class="btn btn-info">Update Campground</button>
-                </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="description">Description</label>
+                            <textarea class="form-control" type="text" id="description" name="campground[description]"
+                                required><%= campground.description%></textarea>
+                            <div class="valid-feedback">
+                                Looks Good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Invalid input detected. Fix the errors and try again.
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-info">Update Campground</button>
+                        </div>
             </form>
             <a href="/campgrounds/<%= campground._id%>">Back To Campground</a>
 
@@ -66,10 +87,39 @@
     </div>
 
     <script>
+        // Function to update visual feedback based on checkbox state
+        function updateImageVisual(imageIndex) {
+            const checkbox = document.getElementById('image-' + imageIndex);
+            const img = checkbox.closest('.col-md-6').querySelector('img');
+
+            if (checkbox.checked) {
+                img.style.opacity = '0.5';
+                img.style.border = '3px solid #dc3545';
+            } else {
+                img.style.opacity = '1';
+                img.style.border = '';
+            }
+        }
+
+        // Function to toggle checkbox when image is clicked
+        function toggleCheckbox(imageIndex) {
+            const checkbox = document.getElementById('image-' + imageIndex);
+            checkbox.checked = !checkbox.checked;
+            updateImageVisual(imageIndex);
+        }
+
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (function () {
             'use strict';
             window.addEventListener('load', function () {
+                // Add event listeners to checkboxes for visual feedback
+                const checkboxes = document.querySelectorAll('input[name="deleteImages[]"]');
+                checkboxes.forEach((checkbox, index) => {
+                    checkbox.addEventListener('change', function () {
+                        updateImageVisual(index);
+                    });
+                });
+
                 // Fetch all the forms we want to apply custom Bootstrap validation styles to
                 var forms = document.getElementsByClassName('validated-form');
                 // Loop over them and prevent submission
