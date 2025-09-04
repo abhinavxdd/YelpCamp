@@ -5,7 +5,7 @@ maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds });
+    res.render('campgrounds/index', { campgrounds, mapToken: process.env.MAPTILER_API_KEY });
 };
 
 module.exports.renderNewForm = (req, res) => {
@@ -32,11 +32,14 @@ module.exports.showCampground = async (req, res) => {
             path: 'author'
         }
     }).populate('author');
+    
     if (!campground) {
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');
     }
-    res.render('campgrounds/show', { campground });
+    
+    console.log('Campground geometry:', campground.geometry); // For debugging
+    res.render('campgrounds/show', { campground, mapToken: process.env.MAPTILER_API_KEY });
 };
 
 module.exports.renderEditForm = async (req, res) => {

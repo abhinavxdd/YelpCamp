@@ -1,37 +1,55 @@
 <% layout('layouts/boilerplate')%>
 
-    <h1>All Campgrounds</h1>
-    <div>
-        <a href="/campgrounds/new">Add Campground</a>
-    </div>
-    <% for (let campground of campgrounds){%>
-        <div class="card" mb-3>
-            <div class="row">
-                <div class="col-md-4">
-                    <% if(campground.images && campground.images.length> 0) { %>
-                        <img class="img-fluid" alt="" src="<%=campground.images[0].url%>">
-                        <% } else { %>
-                            <img class="img-fluid" alt=""
-                                src="https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyyoqgr19ebvw.jpg">
-                            <% } %>
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <%= campground.title %>
-                        </h5>
-                        <p class="card-text">
-                            <%= campground.description %>
-                        </p>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                <%= campground.location%>
-                            </small>
-                        </p>
-                        <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">View <%=campground.title%>
-                                </a>
-                    </div>
+<div id="cluster-map" style="width: 100%; height: 500px; margin-bottom: 20px;"></div>
+
+<h1>All Campgrounds</h1>
+<div>
+    <a href="/campgrounds/new">Add Campground</a>
+</div>
+<% for (let campground of campgrounds){%>
+    <div class="card mb-3">
+        <div class="row">
+            <div class="col-md-4">
+                <% if(campground.images && campground.images.length > 0) { %>
+                    <img class="img-fluid" alt="" src="<%=campground.images[0].url%>">
+                <% } else { %>
+                    <img class="img-fluid" alt="" src="https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyyoqgr19ebvw.jpg">
+                <% } %>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"><%= campground.title %></h5>
+                    <p class="card-text"><%= campground.description %></p>
+                    <p class="card-text">
+                        <small class="text-muted"><%= campground.location%></small>
+                    </p>
+                    <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">View <%=campground.title%></a>
                 </div>
             </div>
         </div>
-        <% }%>
+    </div>
+<% } %>
+
+<script>
+    const mapToken = '<%= mapToken %>';
+    const campgrounds = {
+        type: 'FeatureCollection',
+        features: [
+            <% campgrounds.forEach(function(campground, index){ %>
+                <% if (campground.geometry) { %>
+                {
+                    type: 'Feature',
+                    properties: {
+                        popUpMarkup: `<strong><a href="/campgrounds/<%=campground._id%>"><%=campground.title%></a></strong><p><%=campground.description.substring(0,20)%>...</p>`
+                    },
+                    geometry: <%- JSON.stringify(campground.geometry) %>
+                }<% if (index < campgrounds.length - 1) { %>,<% } %>
+                <% } %>
+            <% }) %>
+        ]
+    };
+</script>
+
+<script src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.js"></script>
+<link href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css" rel="stylesheet" />
+<script src="/javascripts/clusterMap.js"></script>
