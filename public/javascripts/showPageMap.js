@@ -28,5 +28,5 @@ if (campground && campground.geometry && campground.geometry.coordinates && camp
         mapContainer.innerHTML = '<div class="alert alert-info">Map location not available for this campground.</div>';
         mapContainer.style.height = 'auto';
     }
-    console.log('Campground geometry not found:', campground);
+    // console.log('Campground geometry not found:', campground);
 }
