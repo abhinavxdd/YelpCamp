@@ -13,22 +13,40 @@ db.once("open", () => {
 
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
+// Function to generate random coordinates near a city
+const getRandomNearbyCoordinates = (baseLat, baseLng) => {
+    // Add random offset within ~20km radius
+    const latOffset = (Math.random() - 0.5) * 0.2; // ~0.1 degrees = ~10km
+    const lngOffset = (Math.random() - 0.5) * 0.2;
+    
+    return [
+        baseLng + lngOffset,
+        baseLat + latOffset
+    ];
+};
+
 const seedDB = async () => {
     await Campground.deleteMany({});
-    for (let i = 0; i < cities.length; i++) {
+    console.log('Deleted existing campgrounds');
+    
+    // Create 200 campgrounds
+    for (let i = 0; i < 200; i++) {
+        const randomCityIndex = Math.floor(Math.random() * cities.length);
+        const city = cities[randomCityIndex];
         const price = Math.floor(Math.random() * 20) + 10;
+        
+        // Generate random coordinates near the city
+        const coordinates = getRandomNearbyCoordinates(city.latitude, city.longitude);
+        
         const camp = new Campground({
             author: '68b4994ed15b85965ba4097a',
-            location: `${cities[i].city}, ${cities[i].state}`,
+            location: `${city.city}, ${city.state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
-            description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit...',
+            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',
             price,
             geometry: {
                 type: "Point",
-                coordinates: [
-                    cities[i].longitude,
-                    cities[i].latitude
-                ]
+                coordinates: coordinates
             },
             images: [
                 {
@@ -41,8 +59,16 @@ const seedDB = async () => {
                 }
             ]
         });
+        
         await camp.save();
+        
+        // Progress indicator
+        if ((i + 1) % 50 === 0) {
+            console.log(`Created ${i + 1} campgrounds...`);
+        }
     }
+    
+    console.log('Successfully created 200 campgrounds!');
 };
 
 seedDB().then(() => {

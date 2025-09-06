@@ -5,7 +5,14 @@ maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds, mapToken: process.env.MAPTILER_API_KEY });
+    console.log('Sending to view:', {
+        campgroundsCount: campgrounds.length,
+        hasMapToken: !!process.env.MAPTILER_API_KEY
+    });
+    res.render('campgrounds/index', { 
+        campgrounds, 
+        mapToken: process.env.MAPTILER_API_KEY 
+    });
 };
 
 module.exports.renderNewForm = (req, res) => {

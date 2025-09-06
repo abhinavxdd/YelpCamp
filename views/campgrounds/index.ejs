@@ -40,7 +40,7 @@
                 {
                     type: 'Feature',
                     properties: {
-                        popUpMarkup: `<strong><a href="/campgrounds/<%=campground._id%>"><%=campground.title%></a></strong><p><%=campground.description.substring(0,20)%>...</p>`
+                        popUpMarkup: `<a href="/campgrounds/<%=campground._id%>" style="text-decoration: none;"><%=campground.title%></a>`
                     },
                     geometry: <%- JSON.stringify(campground.geometry) %>
                 }<% if (index < campgrounds.length - 1) { %>,<% } %>

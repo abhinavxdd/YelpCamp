@@ -4,7 +4,7 @@ maptilersdk.config.apiKey = mapToken;
 if (campground && campground.geometry && campground.geometry.coordinates && campground.geometry.coordinates.length === 2) {
     const map = new maptilersdk.Map({
         container: 'map',
-        style: maptilersdk.MapStyle.STREETS,
+        style: `https://api.maptiler.com/maps/basic-v2-dark/style.json?key=${mapToken}`,
         center: campground.geometry.coordinates,
         zoom: 10
     });
