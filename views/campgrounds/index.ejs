@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate')%>
 
-<div id="cluster-map" style="width: 100%; height: 500px; margin-bottom: 20px;"></div>
+<div id="cluster-map"></div>
 
 <h1>All Campgrounds</h1>
 <div>
@@ -40,7 +40,7 @@
                 {
                     type: 'Feature',
                     properties: {
-                        popUpMarkup: `<a href="/campgrounds/<%=campground._id%>" style="text-decoration: none;"><%=campground.title%></a>`
+                        popUpMarkup: `<a href="/campgrounds/<%=campground._id%>"><%=campground.title%></a>`
                     },
                     geometry: <%- JSON.stringify(campground.geometry) %>
                 }<% if (index < campgrounds.length - 1) { %>,<% } %>
