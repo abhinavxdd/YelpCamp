@@ -1,32 +1,83 @@
 <% layout('layouts/boilerplate')%>
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row w-100">
-        <div class="col-12 col-sm-10 col-md-6 col-lg-5 col-xl-4 mx-auto">
-            <div class="card shadow" style="max-width: 400px; width: 100%;">
-                <img src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
-                    alt="" class="card-img-top" style="height: 180px; object-fit: cover;">
-                <div class="card-body px-3 px-sm-4 py-3">
-                    <h5 class="card-title text-center mb-3">Register</h5>
+
+    <link rel="stylesheet" href="/stylesheets/register.css">
+
+    <div class="register-container">
+        <a href="/" class="logo-link">
+            <div class="logo">
+                YelpCamp
+            </div>
+        </a>
+        <div class="form-wrapper">
+            <div class="gradient-line"></div>
+            <div class="form-container">
+                <div class="form-header">
+                    <h3 class="form-title">Register</h3>
+                    <p class="form-subtitle">Create your account to get started.</p>
+                </div>
+                <div class="form-content">
                     <form action="/register" method="POST" class="validated-form" novalidate>
-                        <div class="mb-3">
-                            <label class="form-label" for="username">Username</label>
-                            <input class="form-control" type="text" id="username" name="username" required autofocus>
-                            <div class="valid-feedback">Looks good!</div>
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <div class="flex justify-between">
+                                    <label class="input-label">Username</label>
+                                    <div class="success-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-6 h-6">
+                                            <path fill-rule="evenodd"
+                                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <input type="text" name="username" placeholder="Username" id="username"
+                                    autocomplete="off" class="form-input" autofocus required>
+                                <div class="valid-feedback">Looks good!</div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="email">Email</label>
-                            <input class="form-control" type="email" id="email" name="email" required>
-                            <div class="valid-feedback">Looks good!</div>
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <div class="flex justify-between">
+                                    <label class="input-label">Email</label>
+                                    <div class="success-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-6 h-6">
+                                            <path fill-rule="evenodd"
+                                                d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <input type="email" name="email" placeholder="Email" id="email" autocomplete="off"
+                                    class="form-input" required>
+                                <div class="valid-feedback">Looks good!</div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="password">Password</label>
-                            <input class="form-control" type="password" id="password" name="password" required>
-                            <div class="valid-feedback">Looks good!</div>
+                        <div class="input-group">
+                            <div class="input-wrapper">
+                                <div class="flex justify-between">
+                                    <label class="input-label">Password</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="password" name="password" placeholder="Password" id="password"
+                                        class="form-input" required>
+                                </div>
+                                <div class="valid-feedback">Looks good!</div>
+                            </div>
                         </div>
-                        <button class="btn btn-success w-100">Register</button>
+                        <div class="form-options">
+                            <label class="remember-label">
+                                <input type="checkbox" name="terms" class="remember-checkbox" required>
+                                <span class="remember-text">I agree to the <a href="/terms" class="terms-link">Terms &
+                                        Conditions</a></span>
+                            </label>
+                        </div>
+                        <div class="form-actions">
+                            <a class="register-btn" href="/login">Login</a>
+                            <button class="login-btn" type="submit">Register</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
