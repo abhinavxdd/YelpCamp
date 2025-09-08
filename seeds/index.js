@@ -50,12 +50,12 @@ const seedDB = async () => {
             },
             images: [
                 {
-                    url: 'https://res.cloudinary.com/dvyljgvg5/image/upload/v1756822970/YelpCamp/zn5oh39f1dsn6xgowqjw.webp',
-                    filename: 'YelpCamp/zn5oh39f1dsn6xgowqjw'
+                    url: 'https://res.cloudinary.com/dvyljgvg5/image/upload/v1757363436/How-to-Prepare-for-Your-Trek-in-Dharamshala_-Tips-for-Beginners-Experts_ikdopw.jpg',
+                    filename: 'YelpCamp/How-to-Prepare-for-Your-Trek-in-Dharamshala_-Tips-for-Beginners-Experts_ikdopw.jpg'
                 },
                 {
-                    url: 'https://res.cloudinary.com/dvyljgvg5/image/upload/v1756822971/YelpCamp/egvzvdoycilgaimn3rwx.jpg',
-                    filename: 'YelpCamp/egvzvdoycilgaimn3rwx'
+                    url: 'https://res.cloudinary.com/dvyljgvg5/image/upload/v1757363435/camping-triund-hill-during-snowfall-600nw-2134198873_ib3oti.webp',
+                    filename: 'YelpCamp/camping-triund-hill-during-snowfall-600nw-2134198873_ib3oti.webp'
                 }
             ]
         });
