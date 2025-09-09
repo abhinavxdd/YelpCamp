@@ -1,0 +1,386 @@
+/* Flash Modal Styles - No Buttons */
+.flash-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(31, 41, 55, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.flash-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.flash-modal {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    transform: translateY(-30px) scale(0.95);
+    transition: all 0.3s ease;
+}
+
+.flash-modal-overlay.show .flash-modal {
+    transform: translateY(0) scale(1);
+}
+
+.flash-modal-header {
+    padding: 1.5rem 2rem 1rem 2rem;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f9fafb;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.flash-modal-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+}
+
+.flash-modal-icon.success {
+    background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+    color: #059669;
+}
+
+.flash-modal-icon.error {
+    background: linear-gradient(135deg, #FEE2E2, #FECACA);
+    color: #DC2626;
+}
+
+.flash-modal-icon.warning {
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    color: #D97706;
+}
+
+.flash-modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0;
+}
+
+.flash-modal-body {
+    padding: 1.5rem 2rem 2rem 2rem;
+}
+
+.flash-modal-message {
+    color: #4B5563;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Auto-hide progress bar */
+.flash-modal-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #10B981, #059669);
+    transition: width 0.1s linear;
+    border-radius: 0 0 1rem 1rem;
+    width: 100%;
+}
+
+.flash-modal-progress.success {
+    background: linear-gradient(90deg, #10B981, #059669);
+}
+
+.flash-modal-progress.error {
+    background: linear-gradient(90deg, #EF4444, #DC2626);
+}
+
+.flash-modal-progress.warning {
+    background: linear-gradient(90deg, #F59E0B, #D97706);
+}
+
+/* Animation keyframes */
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .flash-modal {
+        margin: 1rem;
+        max-width: calc(100% - 2rem);
+    }
+
+    .flash-modal-header {
+        padding: 1rem 1.5rem 0.75rem 1.5rem;
+    }
+
+    .flash-modal-body {
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+    }
+}
+
+/* Non-Intrusive Toast Notifications - No Layout Shift */
+.flash-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 400px;
+    min-width: 300px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    overflow: hidden;
+    transform: translateX(450px);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 0;
+    border-left: 4px solid #10B981;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    /* Prevent layout shift */
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: auto;
+    /* Ensure it doesn't affect document flow */
+    pointer-events: auto;
+}
+
+.flash-toast.success {
+    border-left-color: #10B981;
+}
+
+.flash-toast.error {
+    border-left-color: #EF4444;
+}
+
+.flash-toast.warning {
+    border-left-color: #F59E0B;
+}
+
+.flash-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.flash-toast.hide {
+    transform: translateX(450px);
+    opacity: 0;
+}
+
+.flash-toast:hover {
+    transform: translateX(-10px) scale(1.02);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+/* Toast Inner Content */
+.toast-wrapper {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    gap: 0.75rem;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.toast-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+.flash-toast.success .toast-icon {
+    background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+    color: #059669;
+}
+
+.flash-toast.error .toast-icon {
+    background: linear-gradient(135deg, #FEE2E2, #FECACA);
+    color: #DC2626;
+}
+
+.flash-toast.warning .toast-icon {
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    color: #D97706;
+}
+
+.toast-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1F2937;
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+}
+
+.toast-message {
+    font-size: 0.8rem;
+    color: #6B7280;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+/* Progress Bar */
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    transition: width 0.1s linear;
+    border-radius: 0 0 12px 12px;
+}
+
+.toast-progress.success {
+    background: linear-gradient(90deg, #10B981, #059669);
+}
+
+.toast-progress.error {
+    background: linear-gradient(90deg, #EF4444, #DC2626);
+}
+
+.toast-progress.warning {
+    background: linear-gradient(90deg, #F59E0B, #D97706);
+}
+
+/* Mobile Responsive - No Layout Shift */
+@media (max-width: 768px) {
+    .flash-toast {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: calc(100vw - 20px);
+        min-width: 0;
+        transform: translateY(-100px);
+        width: auto;
+    }
+
+    .flash-toast.show {
+        transform: translateY(0);
+    }
+
+    .flash-toast.hide {
+        transform: translateY(-100px);
+    }
+
+    .flash-toast:hover {
+        transform: translateY(-5px) scale(1.01);
+    }
+}
+
+/* Ensure no document flow interference */
+body {
+    /* Prevent any shifting */
+    overflow-x: hidden;
+}
+
+/* Multiple Toast Support */
+.flash-toast:nth-child(2) {
+    top: 90px;
+}
+
+.flash-toast:nth-child(3) {
+    top: 160px;
+}
+
+/* Icon animation */
+.toast-icon i {
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .flash-modal {
+        background: #1F2937;
+        color: white;
+    }
+
+    .flash-modal-header {
+        background: #374151;
+        border-bottom-color: #4B5563;
+    }
+
+    .flash-modal-title {
+        color: white;
+    }
+
+    .flash-modal-message {
+        color: #D1D5DB;
+    }
+
+    .flash-modal-actions {
+        border-top-color: #4B5563;
+    }
+
+    .flash-modal-close {
+        background: rgba(255, 255, 255, 0.1);
+        color: #D1D5DB;
+    }
+
+    .flash-modal-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .flash-toast {
+        background: #1F2937;
+        color: white;
+    }
+
+    .toast-title {
+        color: white;
+    }
+
+    .toast-message {
+        color: #D1D5DB;
+    }
+}

@@ -1,32 +1,26 @@
 maptilersdk.config.apiKey = mapToken;
 
-// Check if campground and geometry exist
-if (campground && campground.geometry && campground.geometry.coordinates && campground.geometry.coordinates.length === 2) {
-    const map = new maptilersdk.Map({
-        container: 'map',
-        style: `https://api.maptiler.com/maps/basic-v2-dark/style.json?key=${mapToken}`,
-        center: campground.geometry.coordinates,
-        zoom: 10
-    });
+const map = new maptilersdk.Map({
+    container: 'map',
+    style: maptilersdk.MapStyle.STREETS,
+    center: campground.geometry.coordinates,
+    zoom: 10,
+    attributionControl: false // Disable default attribution
+});
 
-    // Add marker after map loads
-    map.on('load', function() {
-        new maptilersdk.Marker()
-            .setLngLat(campground.geometry.coordinates)
-            .setPopup(
-                new maptilersdk.Popup({ offset: 25 })
-                    .setHTML(
-                        `<h3>${campground.title}</h3><p>${campground.location}</p>`
-                    )
+// Add only ONE custom attribution control
+map.addControl(new maptilersdk.AttributionControl({
+    compact: false,
+    customAttribution: '© MapTiler © OpenStreetMap contributors'
+}), 'bottom-right');
+
+// Add marker for campground location
+new maptilersdk.Marker()
+    .setLngLat(campground.geometry.coordinates)
+    .setPopup(
+        new maptilersdk.Popup({ offset: 25 })
+            .setHTML(
+                `<h5>${campground.title}</h5><p>${campground.location}</p>`
             )
-            .addTo(map);
-    });
-} else {
-    // Hide map container and show message if no geometry
-    const mapContainer = document.getElementById('map');
-    if (mapContainer) {
-        mapContainer.innerHTML = '<div class="alert alert-info">Map location not available for this campground.</div>';
-        mapContainer.style.height = 'auto';
-    }
-    // console.log('Campground geometry not found:', campground);
-}
+    )
+    .addTo(map);

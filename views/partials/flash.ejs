@@ -1,26 +1,111 @@
 <% if(success && success.length) {%>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <%= success %>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+    <div class="flash-toast success" id="flashToast">
+        <div class="toast-wrapper">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">Success!</div>
+                <div class="toast-message">
+                    <%= success %>
+                </div>
+            </div>
+        </div>
+        <div class="toast-progress success" id="toastProgress"></div>
     </div>
     <% } %>
 
-        <% if(warning && warning.length) {%>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <%= warning %>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <% if(error && error.length) {%>
+            <div class="flash-toast error" id="flashToast">
+                <div class="toast-wrapper">
+                    <div class="toast-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="toast-content">
+                        <div class="toast-title">Error</div>
+                        <div class="toast-message">
+                            <%= error %>
+                        </div>
+                    </div>
+                </div>
+                <div class="toast-progress error" id="toastProgress"></div>
             </div>
             <% } %>
 
-                <% if(error && error.length) {%>
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <%= error %>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                <% if(warning && warning.length) {%>
+                    <div class="flash-toast warning" id="flashToast">
+                        <div class="toast-wrapper">
+                            <div class="toast-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="toast-content">
+                                <div class="toast-title">Warning</div>
+                                <div class="toast-message">
+                                    <%= warning %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toast-progress warning" id="toastProgress"></div>
                     </div>
                     <% } %>
+
+                        <script>
+                            // Non-intrusive Toast Notification - No Layout Shift
+                            function showToast() {
+                                const toast = document.getElementById('flashToast');
+                                if (toast) {
+                                    // Show toast with slide-in animation
+                                    setTimeout(() => {
+                                        toast.classList.add('show');
+                                    }, 100);
+
+                                    // Auto-hide after 3 seconds with progress bar
+                                    const progressBar = document.getElementById('toastProgress');
+                                    if (progressBar) {
+                                        let width = 100;
+                                        const interval = setInterval(() => {
+                                            width -= 3.33;
+                                            progressBar.style.width = width + '%';
+
+                                            if (width <= 0) {
+                                                clearInterval(interval);
+                                                hideToast();
+                                            }
+                                        }, 100);
+
+                                        toast.dataset.intervalId = interval;
+                                    }
+                                }
+                            }
+
+                            function hideToast() {
+                                const toast = document.getElementById('flashToast');
+                                if (toast) {
+                                    if (toast.dataset.intervalId) {
+                                        clearInterval(toast.dataset.intervalId);
+                                    }
+
+                                    toast.classList.add('hide');
+
+                                    setTimeout(() => {
+                                        if (toast.parentNode) {
+                                            toast.parentNode.removeChild(toast);
+                                        }
+                                    }, 300);
+                                }
+                            }
+
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const toast = document.getElementById('flashToast');
+                                if (toast) {
+                                    showToast();
+                                }
+                            });
+
+                            document.addEventListener('click', function (e) {
+                                const toast = document.getElementById('flashToast');
+                                if (toast && (toast.contains(e.target) || e.target === toast)) {
+                                    hideToast();
+                                }
+                            });
+                        </script>
