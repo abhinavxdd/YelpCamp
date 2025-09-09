@@ -43,7 +43,7 @@
 .navbar-nav .nav-link {
     color: rgba(255, 255, 255, 0.9) !important;
     font-weight: 500;
-    margin: 0 0.5rem;
+    margin: 0;
     padding: 0.5rem 1rem !important;
     border-radius: 25px;
     transition: all 0.3s ease;
