@@ -1,107 +1,131 @@
 <% layout('layouts/homeboilerplate')%>
-<link rel="stylesheet" href="/stylesheets/campgrounds.css">
+<link rel="stylesheet" href="/stylesheets/campgrounds.css" />
 
 <!-- Hero Section -->
 <section class="campgrounds-hero">
-    <div class="hero-content">
-        <h1 class="hero-title">Discover Amazing Campgrounds</h1>
-        <p class="hero-subtitle">Find your perfect outdoor adventure from our collection of stunning locations</p>
-        <div class="hero-actions">
-            <a href="/campgrounds/new" class="btn-primary-custom">
-                <span class="btn-icon">+</span>
-                Add New Campground
-            </a>
-        </div>
+  <div class="hero-content">
+    <h1 class="hero-title">Discover Amazing Campgrounds</h1>
+    <p class="hero-subtitle">
+      Find your perfect outdoor adventure from our collection of stunning
+      locations
+    </p>
+    <div class="hero-actions">
+      <a href="/campgrounds/new" class="btn-primary-custom">
+        <span class="btn-icon">+</span>
+        Add New Campground
+      </a>
     </div>
-    <div class="hero-map">
-        <div id="cluster-map"></div>
-    </div>
+  </div>
+  <div class="hero-map">
+    <div id="cluster-map"></div>
+  </div>
 </section>
 
 <!-- Campgrounds Grid -->
 <section class="campgrounds-section">
-    <!-- Remove container-fluid and use direct content -->
-    <div class="section-header">
-        <h2 class="section-title">All Campgrounds</h2>
-        <div class="campgrounds-count">
-            <span class="count-badge"><%= campgrounds.length %> campgrounds found</span>
-        </div>
+  <!-- Remove container-fluid and use direct content -->
+  <div class="section-header">
+    <h2 class="section-title">All Campgrounds</h2>
+    <div class="campgrounds-count">
+      <span class="count-badge"
+        ><%= campgrounds.length %> campgrounds found</span
+      >
     </div>
-    
-    <div class="campgrounds-grid">
-        <% for (let campground of campgrounds) { %>
-            <div class="campground-card">
-                <div class="card-image-container">
-                    <% if (campground.images.length) { %>
-                        <img crossorigin="anonymous" class="card-image" alt="<%= campground.title %>" 
-                             src="<%= campground.images[0].url %>" 
-                             loading="lazy">
-                    <% } else { %>
-                        <img crossorigin="anonymous" class="card-image" alt="<%= campground.title %>" 
-                             src="https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyynjil7lswf4.png" 
-                             loading="lazy">
-                    <% } %>
-                    <div class="card-overlay">
-                        <a href="/campgrounds/<%= campground._id %>" class="card-overlay-btn">
-                            View Details
-                        </a>
-                    </div>
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title"><%= campground.title %></h3>
-                    <p class="card-description"><%= campground.description.length > 100 ? campground.description.substring(0, 100) + '...' : campground.description %></p>
-                    <div class="card-location">
-                        <span class="location-icon">📍</span>
-                        <%= campground.location %>
-                    </div>
-                    <div class="card-footer">
-                        <span class="card-price">$<%= campground.price %>/night</span>
-                        <a href="/campgrounds/<%= campground._id %>" class="card-btn">
-                            Explore
-                            <span class="btn-arrow">→</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+  </div>
+
+  <div class="campgrounds-grid">
+    <% for (let campground of campgrounds) { %>
+    <div class="campground-card">
+      <div class="card-image-container">
+        <% if (campground.images.length) { %>
+        <img
+          crossorigin="anonymous"
+          class="card-image"
+          alt="<%= campground.title %>"
+          src="<%= campground.images[0].url %>"
+          loading="lazy"
+        />
+        <% } else { %>
+        <img
+          crossorigin="anonymous"
+          class="card-image"
+          alt="<%= campground.title %>"
+          src="https://res.cloudinary.com/douqbebwk/image/upload/v1600103881/YelpCamp/lz8jjv2gyynjil7lswf4.png"
+          loading="lazy"
+        />
         <% } %>
-    </div>
-    
-    <% if (campgrounds.length === 0) { %>
-        <div class="empty-state">
-            <div class="empty-icon">🏕️</div>
-            <h3 class="empty-title">No campgrounds yet</h3>
-            <p class="empty-description">Be the first to add a campground to our collection!</p>
-            <a href="/campgrounds/new" class="btn-primary-custom">Add First Campground</a>
+        <div class="card-overlay">
+          <a href="/campgrounds/<%= campground._id %>" class="card-overlay-btn">
+            View Details
+          </a>
         </div>
+      </div>
+      <div class="card-content">
+        <h3 class="card-title"><%= campground.title %></h3>
+        <p class="card-description">
+          <%= campground.description.length > 100 ?
+          campground.description.substring(0, 100) + '...' :
+          campground.description %>
+        </p>
+        <div class="card-location">
+          <span class="location-icon">📍</span>
+          <%= campground.location %>
+        </div>
+        <div class="card-footer">
+          <span class="card-price">$<%= campground.price %>/night</span>
+          <a href="/campgrounds/<%= campground._id %>" class="card-btn">
+            Explore
+            <span class="btn-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
     <% } %>
+  </div>
+
+  <% if (campgrounds.length === 0) { %>
+  <div class="empty-state">
+    <div class="empty-icon">🏕️</div>
+    <h3 class="empty-title">No campgrounds yet</h3>
+    <p class="empty-description">
+      Be the first to add a campground to our collection!
+    </p>
+    <a href="/campgrounds/new" class="btn-primary-custom"
+      >Add First Campground</a
+    >
+  </div>
+  <% } %>
 </section>
 
 <script>
-    const mapToken = '<%= mapToken %>';
-    const campgrounds = {
-        type: 'FeatureCollection',
-        features: [
-            <% campgrounds.forEach(function(campground, index) { %>
-                <% if (campground.geometry) { %>
-                {
-                    type: 'Feature',
-                    properties: {
-                        popUpMarkup: `
-                            <div class="map-popup">
-                                <h6><%= campground.title %></h6>
-                                <p><%= campground.location %></p>
-                                <a href="/campgrounds/<%= campground._id %>" class="popup-btn">View Details</a>
-                            </div>
-                        `
-                    },
-                    geometry: <%- JSON.stringify(campground.geometry) %>
-                }<% if (index < campgrounds.length - 1) { %>,<% } %>
-                <% } %>
-            <% }) %>
-        ]
-    };
+  const mapToken = '<%= mapToken %>';
+  const campgrounds = {
+      type: 'FeatureCollection',
+      features: [
+          <% campgrounds.forEach(function(campground, index) { %>
+              <% if (campground.geometry) { %>
+              {
+                  type: 'Feature',
+                  properties: {
+                      popUpMarkup: `
+                          <div class="map-popup">
+                              <h6><%= campground.title %></h6>
+                              <p><%= campground.location %></p>
+                              <a href="/campgrounds/<%= campground._id %>" class="popup-btn">View Details</a>
+                          </div>
+                      `
+                  },
+                  geometry: <%- JSON.stringify(campground.geometry) %>
+              }<% if (index < campgrounds.length - 1) { %>,<% } %>
+              <% } %>
+          <% }) %>
+      ]
+  };
 </script>
 
-<script crossorigin="anonymous" src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.js"></script>
-<link crossorigin="anonymous" href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css" rel="stylesheet" />
+<script src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.js"></script>
+<link
+  href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css"
+  rel="stylesheet"
+/>
 <script src="/javascripts/clusterMap.js"></script>

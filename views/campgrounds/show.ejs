@@ -1,197 +1,261 @@
 <% layout('layouts/boilerplate')%>
-    <link rel="stylesheet" href="/stylesheets/stars.css">
-    <link rel="stylesheet" href="/stylesheets/showpage.css">
+<link rel="stylesheet" href="/stylesheets/stars.css" />
+<link rel="stylesheet" href="/stylesheets/showpage.css" />
 
-    <div class="show-container">
-        <!-- Header Section -->
-        <div class="campground-header">
-            <div class="container text-center">
-                <h1 class="campground-title">
-                    <%= campground.title%>
-                </h1>
-                <p class="campground-location">
-                    📍 <%= campground.location%>
-                </p>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <!-- Image Gallery -->
-                        <div class="image-gallery">
-                            <div id="campgroundCarousel" class="carousel slide" data-ride="carousel">
-                                <div class="carousel-inner">
-                                    <% campground.images.forEach((img, i)=> { %>
-                                        <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
-                                            <img crossorigin="anonymous" src="<%= img.url%>" class="d-block w-100"
-                                                alt="">
-                                        </div>
-                                        <% }) %>
-                                </div>
-                                <% if(campground.images.length> 1) {%>
-                                    <a class="carousel-control-prev" href="#campgroundCarousel" role="button"
-                                        data-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#campgroundCarousel" role="button"
-                                        data-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                    <% } %>
-                            </div>
-                        </div>
-
-                        <!-- Info Card -->
-                        <div class="card info-card">
-                            <div class="card-body">
-                                <p class="description-text">
-                                    <%= campground.description%>
-                                </p>
-                            </div>
-                            <ul class="list-group info-list">
-                                <li class="list-group-item">
-                                    <i class="fas fa-user"></i> Submitted by <strong>
-                                        <%= campground.author.username%>
-                                    </strong>
-                                </li>
-                                <li class="list-group-item price-item">
-                                    <i class="fas fa-dollar-sign"></i> $<%= campground.price%>/night
-                                </li>
-                            </ul>
-                            <% if( currentUser && campground.author.equals(currentUser._id)) {%>
-                                <div class="action-section">
-                                    <a class="btn-action btn-edit" href="/campgrounds/<%=campground._id%>/edit">
-                                        <i class="fas fa-edit"></i> Edit Campground
-                                    </a>
-                                    <form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE"
-                                        method="POST">
-                                        <button class="btn-action btn-delete" type="submit">
-                                            <i class="fas fa-trash"></i> Delete Campground
-                                        </button>
-                                    </form>
-                                </div>
-                                <% } %>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6">
-                        <!-- Map Section -->
-                        <div class="map-section">
-                            <div class="map-header">
-                                <h3 class="map-title">
-                                    <i class="fas fa-map"></i> Location
-                                </h3>
-                            </div>
-                            <div class="map-container">
-                                <div id='map'></div>
-                            </div>
-                        </div>
-
-                        <!-- Review Section -->
-                        <div class="review-section">
-                            <div class="review-header">
-                                <h3 class="review-title">
-                                    <i class="fas fa-star"></i>
-                                    <% if(currentUser) { %>
-                                        Reviews (<%= campground.reviews.length %>)
-                                            <% } else { %>
-                                                Reviews (Login/Signup to see reviews)
-                                                <% } %>
-                                </h3>
-                            </div>
-                            <div class="review-content">
-                                <% if(currentUser){ %>
-                                    <form action="/campgrounds/<%=campground._id%>/reviews" method="POST"
-                                        class="review-form validated-form" novalidate>
-                                        <fieldset class="starability-basic">
-                                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]"
-                                                value="1" checked aria-label="No rating." />
-                                            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                                            <label for="first-rate1" title="Terrible">1 star</label>
-                                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                                            <label for="first-rate2" title="Not good">2 stars</label>
-                                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                                            <label for="first-rate3" title="Average">3 stars</label>
-                                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                                            <label for="first-rate4" title="Very good">4 stars</label>
-                                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                                            <label for="first-rate5" title="Amazing">5 stars</label>
-                                        </fieldset>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="body">Your Review</label>
-                                            <textarea class="form-control" name="review[body]" id="body" rows="4"
-                                                required placeholder="Share your experience..."></textarea>
-                                            <div class="valid-feedback">Looks good!</div>
-                                        </div>
-                                        <button class="btn-submit" type="submit">
-                                            <i class="fas fa-paper-plane"></i> Submit Review
-                                        </button>
-                                    </form>
-
-                                    <% for(let review of campground.reviews) { %>
-                                        <div class="review-card">
-                                            <div class="review-card-body">
-                                                <h5 class="review-author">
-                                                    <i class="fas fa-user-circle"></i>
-                                                    <%= review.author.username%>
-                                                </h5>
-                                                <div class="review-rating">
-                                                    <p class="starability-result" data-rating="<%=review.rating%>"></p>
-                                                </div>
-                                                <p class="review-text">
-                                                    <%= review.body %>
-                                                </p>
-                                                <% if( currentUser && review.author.equals(currentUser._id)) {%>
-                                                    <form
-                                                        action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE"
-                                                        method="POST">
-                                                        <button class="btn-delete-review" type="submit">
-                                                            <i class="fas fa-trash"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                    <% } %>
-                                            </div>
-                                        </div>
-                                        <% } %>
-                                            <% } else { %>
-                                                <div class="login-prompt">
-                                                    <div class="login-card">
-                                                        <div class="login-icon">
-                                                            <i class="fas fa-lock"></i>
-                                                        </div>
-                                                        <h4>Login Required</h4>
-                                                        <p>Please login or signup to view and submit reviews for this
-                                                            campground.</p>
-                                                        <div class="login-actions">
-                                                            <a href="/login" class="btn-login">
-                                                                <i class="fas fa-sign-in-alt"></i> Login
-                                                            </a>
-                                                            <a href="/register" class="btn-signup">
-                                                                <i class="fas fa-user-plus"></i> Sign Up
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <% } %>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="show-container">
+  <!-- Header Section -->
+  <div class="campground-header">
+    <div class="container text-center">
+      <h1 class="campground-title"><%= campground.title%></h1>
+      <p class="campground-location">📍 <%= campground.location%></p>
     </div>
+  </div>
 
-    <script>
-        const mapToken = '<%= mapToken %>';
-        const campground = <%- JSON.stringify(campground) %>;
-    </script>
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+          <!-- Image Gallery -->
+          <div class="image-gallery">
+            <div
+              id="campgroundCarousel"
+              class="carousel slide"
+              data-ride="carousel"
+            >
+              <div class="carousel-inner">
+                <% campground.images.forEach((img, i)=> { %>
+                <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+                  <img
+                    crossorigin="anonymous"
+                    src="<%= img.url%>"
+                    class="d-block w-100"
+                    alt=""
+                  />
+                </div>
+                <% }) %>
+              </div>
+              <% if(campground.images.length> 1) {%>
+              <a
+                class="carousel-control-prev"
+                href="#campgroundCarousel"
+                role="button"
+                data-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a
+                class="carousel-control-next"
+                href="#campgroundCarousel"
+                role="button"
+                data-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Next</span>
+              </a>
+              <% } %>
+            </div>
+          </div>
 
-    <script crossorigin="anonymous" src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.js"></script>
-    <link crossorigin="anonymous" href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css"
-        rel="stylesheet" />
-    <script src="/javascripts/showPageMap.js"></script>
+          <!-- Info Card -->
+          <div class="card info-card">
+            <div class="card-body">
+              <p class="description-text"><%= campground.description%></p>
+            </div>
+            <ul class="list-group info-list">
+              <li class="list-group-item">
+                <i class="fas fa-user"></i> Submitted by
+                <strong> <%= campground.author.username%> </strong>
+              </li>
+              <li class="list-group-item price-item">
+                <i class="fas fa-dollar-sign"></i> $<%= campground.price%>/night
+              </li>
+            </ul>
+            <% if( currentUser && campground.author.equals(currentUser._id)) {%>
+            <div class="action-section">
+              <a
+                class="btn-action btn-edit"
+                href="/campgrounds/<%=campground._id%>/edit"
+              >
+                <i class="fas fa-edit"></i> Edit Campground
+              </a>
+              <form
+                class="d-inline"
+                action="/campgrounds/<%=campground._id%>?_method=DELETE"
+                method="POST"
+              >
+                <button class="btn-action btn-delete" type="submit">
+                  <i class="fas fa-trash"></i> Delete Campground
+                </button>
+              </form>
+            </div>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <!-- Map Section -->
+          <div class="map-section">
+            <div class="map-header">
+              <h3 class="map-title"><i class="fas fa-map"></i> Location</h3>
+            </div>
+            <div class="map-container">
+              <div id="map"></div>
+            </div>
+          </div>
+
+          <!-- Review Section -->
+          <div class="review-section">
+            <div class="review-header">
+              <h3 class="review-title">
+                <i class="fas fa-star"></i>
+                <% if(currentUser) { %> Reviews (<%= campground.reviews.length
+                %>) <% } else { %> Reviews (Login/Signup to see reviews) <% } %>
+              </h3>
+            </div>
+            <div class="review-content">
+              <% if(currentUser){ %>
+              <form
+                action="/campgrounds/<%=campground._id%>/reviews"
+                method="POST"
+                class="review-form validated-form"
+                novalidate
+              >
+                <fieldset class="starability-basic">
+                  <input
+                    type="radio"
+                    id="no-rate"
+                    class="input-no-rate"
+                    name="review[rating]"
+                    value="1"
+                    checked
+                    aria-label="No rating."
+                  />
+                  <input
+                    type="radio"
+                    id="first-rate1"
+                    name="review[rating]"
+                    value="1"
+                  />
+                  <label for="first-rate1" title="Terrible">1 star</label>
+                  <input
+                    type="radio"
+                    id="first-rate2"
+                    name="review[rating]"
+                    value="2"
+                  />
+                  <label for="first-rate2" title="Not good">2 stars</label>
+                  <input
+                    type="radio"
+                    id="first-rate3"
+                    name="review[rating]"
+                    value="3"
+                  />
+                  <label for="first-rate3" title="Average">3 stars</label>
+                  <input
+                    type="radio"
+                    id="first-rate4"
+                    name="review[rating]"
+                    value="4"
+                  />
+                  <label for="first-rate4" title="Very good">4 stars</label>
+                  <input
+                    type="radio"
+                    id="first-rate5"
+                    name="review[rating]"
+                    value="5"
+                  />
+                  <label for="first-rate5" title="Amazing">5 stars</label>
+                </fieldset>
+                <div class="mb-3">
+                  <label class="form-label" for="body">Your Review</label>
+                  <textarea
+                    class="form-control"
+                    name="review[body]"
+                    id="body"
+                    rows="4"
+                    required
+                    placeholder="Share your experience..."
+                  ></textarea>
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+                <button class="btn-submit" type="submit">
+                  <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+              </form>
+
+              <% for(let review of campground.reviews) { %>
+              <div class="review-card">
+                <div class="review-card-body">
+                  <h5 class="review-author">
+                    <i class="fas fa-user-circle"></i>
+                    <%= review.author.username%>
+                  </h5>
+                  <div class="review-rating">
+                    <p
+                      class="starability-result"
+                      data-rating="<%=review.rating%>"
+                    ></p>
+                  </div>
+                  <p class="review-text"><%= review.body %></p>
+                  <% if( currentUser && review.author.equals(currentUser._id))
+                  {%>
+                  <form
+                    action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE"
+                    method="POST"
+                  >
+                    <button class="btn-delete-review" type="submit">
+                      <i class="fas fa-trash"></i> Delete
+                    </button>
+                  </form>
+                  <% } %>
+                </div>
+              </div>
+              <% } %> <% } else { %>
+              <div class="login-prompt">
+                <div class="login-card">
+                  <div class="login-icon">
+                    <i class="fas fa-lock"></i>
+                  </div>
+                  <h4>Login Required</h4>
+                  <p>
+                    Please login or signup to view and submit reviews for this
+                    campground.
+                  </p>
+                  <div class="login-actions">
+                    <a href="/login" class="btn-login">
+                      <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                    <a href="/register" class="btn-signup">
+                      <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const mapToken = '<%= mapToken %>';
+  const campground = <%- JSON.stringify(campground) %>;
+</script>
+
+<script src="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.umd.js"></script>
+<link
+  href="https://cdn.maptiler.com/maptiler-sdk-js/v2.0.3/maptiler-sdk.css"
+  rel="stylesheet"
+/>
+<script src="/javascripts/showPageMap.js"></script>
